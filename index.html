@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4361ee">
+    <title>Calculadora de Valor/Hora</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/RPJJDigital.png">
+    <link rel="icon" type="image/png" href="icons/RPJJDigital.png">
+    <link rel="shortcut icon" href="icons/RPJJDigital.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6e6;
+        }
+        
+        .container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: rgba(26, 32, 44, 0.95);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 35px;
+            color: #e6e6e6;
+            font-weight: 600;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            border-radius: 2px;
+        }
+        
+        .input-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #e6e6e6;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .input-group:focus-within label {
+            color: #4361ee;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #2d3748;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #1a202c;
+            color: #e6e6e6;
+        }
+        
+        input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+            outline: none;
+            background-color: #2d3748;
+        }
+        
+        input::placeholder {
+            color: #718096;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #3a56d4, #6308a1);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.4);
+        }
+        
+        /* A seção de resultados foi removida, pois agora os resultados são exibidos apenas em uma nova aba */
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* O CSS da tabela de resultados foi removido, pois agora os resultados são exibidos apenas em uma nova aba */
+        
+        .result-item {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora Salarial</h1>
+        
+        <div class="input-group">
+            <label for="salary">Digite seu salário mensal (R$):</label>
+            <input type="number" id="salary" placeholder="" min="0" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label for="saturdays">Hora Extra 50%:</label>
+            <input type="number" id="saturdays" placeholder="" min="0" step="0.01" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="sundays">Hora Extra 100%:</label>
+            <input type="number" id="sundays" placeholder="" min="0" step="0.01" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="production">Produção:</label>
+            <input type="number" id="production" placeholder="Digite um valor" min="0" step="0.01" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="working-days">Dias úteis:</label>
+            <input type="number" id="working-days" placeholder="" min="0" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="non-working-days">Dias não úteis:</label>
+            <input type="number" id="non-working-days" placeholder="" min="0" value="">
+        </div>
+        
+        <div class="input-group">
+            <label for="dependents">Número de dependentes:</label>
+            <input type="number" id="dependents" placeholder="" min="0" value="">
+        </div>
+        
+        <button id="calculate-new-tab" style="background: linear-gradient(to right, #0f9d58, #0b8043);">Calcular</button>
+        
+        <!-- A seção de resultados foi removida, pois agora os resultados são exibidos apenas em uma nova aba -->
+    </div>
+
+    <script>
+        // Função para realizar o cálculo
+        function performCalculation() {
+            // Obter o valor do salário
+            const salary = parseFloat(document.getElementById('salary').value);
+            
+            // Obter o total de horas extras 50%
+            const extraHours50 = parseFloat(document.getElementById('saturdays').value) || 0;
+            
+            // Obter o total de horas extras 100%
+            const extraHours100 = parseFloat(document.getElementById('sundays').value) || 0;
+            
+            // Obter o valor da produção
+            const production = parseFloat(document.getElementById('production').value) || 0;
+            
+            // Obter os dias úteis e não úteis
+            const workingDays = parseInt(document.getElementById('working-days').value) || 0;
+            const nonWorkingDays = parseInt(document.getElementById('non-working-days').value) || 0;
+            
+            // Obter o número de dependentes
+            const dependents = parseInt(document.getElementById('dependents').value) || 0;
+            const dependentValue = 189.59; // Valor fixo por dependente
+            const dependentsTotal = dependents * dependentValue;
+            
+            // Verificar se o valor é válido
+            if (isNaN(salary) || salary <= 0) {
+                alert('Por favor, digite um valor de salário válido!');
+                return;
+            }
+            
+            // Verificar se os dias úteis são válidos para o cálculo do DSR Reflexo
+            if (workingDays <= 0 && nonWorkingDays > 0) {
+                alert('Por favor, digite um valor válido para dias úteis!');
+                return;
+            }
+            
+            // Calcular o valor da hora normal (salário dividido por 220 horas)
+            const normalHourValue = salary / 220;
+            
+            // Calcular o valor da hora com acréscimo de 50%
+            const hour50Value = normalHourValue * 1.5;
+            
+            // Calcular o valor da hora com acréscimo de 100%
+            const hour100Value = normalHourValue * 2;
+            
+            // Calcular o valor total das horas extras com acréscimo de 50%
+            const saturdayExtraValue = extraHours50 * hour50Value;
+            
+            // Calcular o valor total das horas extras com acréscimo de 100%
+            const sundayExtraValue = extraHours100 * hour100Value;
+            
+            // Valor das horas extras durante a semana (agora incluído no campo de Hora Extra 50%)
+            const weekdayExtraValue = 0;
+            
+            // Calcular o D.S.R Reflexo
+            let dsrReflexoValue = 0;
+            if (workingDays > 0) {
+                // Soma de todas as horas extras
+                const totalExtras = saturdayExtraValue + sundayExtraValue + weekdayExtraValue;
+                // Cálculo do D.S.R Reflexo: (total extras / dias úteis) * dias não úteis
+                dsrReflexoValue = (totalExtras / workingDays) * nonWorkingDays;
+            }
+            
+            // Calcular as Horas D.S.R Reflexo (D.S.R Reflexo dividido pelo valor da hora normal)
+            let dsrReflexoHours = 0;
+            if (normalHourValue > 0) {
+                dsrReflexoHours = dsrReflexoValue / normalHourValue;
+            }
+            
+            // Calcular o salário bruto total (sem incluir o valor dos dependentes)
+            const grossSalary = salary + saturdayExtraValue + sundayExtraValue + weekdayExtraValue + production + dsrReflexoValue;
+            
+            // Calcular o INSS com base na tabela de 2025
+            let inssRate = 0;
+            let inssDeduction = 0;
+            let inssValue = 0;
+            
+            // Tabela INSS 2025
+            if (grossSalary <= 1518.00) {
+                inssRate = 0.075; // 7,5%
+                inssDeduction = 0;
+                inssValue = grossSalary * inssRate;
+            } else if (grossSalary <= 2793.88) {
+                inssRate = 0.09; // 9%
+                inssDeduction = 22.77;
+                inssValue = (grossSalary * inssRate) - inssDeduction;
+            } else if (grossSalary <= 4190.83) {
+                inssRate = 0.12; // 12%
+                inssDeduction = 106.60;
+                inssValue = (grossSalary * inssRate) - inssDeduction;
+            } else if (grossSalary <= 8157.41) {
+                inssRate = 0.14; // 14%
+                inssDeduction = 190.42;
+                inssValue = (grossSalary * inssRate) - inssDeduction;
+            } else {
+                // Teto do INSS 2025
+                inssRate = 0.14; // 14%
+                inssValue = 951.59; // Valor máximo de contribuição
+            }
+            
+            // Calcular o salário após o desconto do INSS
+            const salaryAfterInss = grossSalary - inssValue;
+            
+            // Subtrair o valor dos dependentes do salário após INSS para cálculo do IRPF
+            const salaryAfterInssAndDependents = salaryAfterInss - dependentsTotal;
+            
+            // Calcular o IRPF com base na tabela de 2025 (aplicado sobre o salário após INSS)
+            let irpfRate = 0;
+            let irpfDeduction = 0;
+            let irpfRange = '';
+            
+            // Tabela IRPF 2025 (aplicada sobre o salário após INSS e dedução dos dependentes)
+            if (salaryAfterInssAndDependents <= 2259.20) {
+                irpfRate = 0;
+                irpfDeduction = 0;
+                irpfRange = 'Até R$ 2.259,20';
+            } else if (salaryAfterInssAndDependents <= 2826.65) {
+                irpfRate = 0.075; // 7,5%
+                irpfDeduction = 169.44;
+                irpfRange = 'De R$ 2.259,21 até R$ 2.826,65';
+            } else if (salaryAfterInssAndDependents <= 3751.05) {
+                irpfRate = 0.15; // 15%
+                irpfDeduction = 381.44;
+                irpfRange = 'De R$ 2.826,66 até R$ 3.751,05';
+            } else if (salaryAfterInssAndDependents <= 4664.68) {
+                irpfRate = 0.225; // 22,5%
+                irpfDeduction = 662.77;
+                irpfRange = 'De R$ 3.751,06 até R$ 4.664,68';
+            } else {
+                irpfRate = 0.275; // 27,5%
+                irpfDeduction = 896.00;
+                irpfRange = 'Acima de R$ 4.664,69';
+            }
+            
+            // Calcular o valor do IRPF (sobre o salário após INSS e dedução dos dependentes)
+            const irpfValue = (salaryAfterInssAndDependents * irpfRate) - irpfDeduction;
+            
+            // Calcular o Salário Líquido (Salário Bruto Total - Valor do INSS - Valor do IRPF)
+            const netSalary = grossSalary - inssValue - Math.max(0, irpfValue);
+            
+            // Calcular o total de descontos (INSS + IRPF)
+            const totalDeductions = inssValue + Math.max(0, irpfValue);
+            
+            // Não atualizamos mais os elementos na mesma página, pois os resultados são exibidos em uma nova aba
+            // Os cálculos são mantidos apenas para serem passados como parâmetros para a página de resultados
+            
+            // Retornar os valores calculados para uso externo
+            return {
+                salary,
+                extraHours50,
+                extraHours100,
+                production,
+                workingDays,
+                nonWorkingDays,
+                dependents,
+                dependentValue,
+                dependentsTotal,
+                normalHourValue,
+                hour50Value,
+                hour100Value,
+                saturdayExtraValue,
+                sundayExtraValue,
+                dsrReflexoValue,
+                dsrReflexoHours,
+                grossSalary,
+                inssRate,
+                inssValue,
+                salaryAfterInss,
+                salaryAfterInssAndDependents,
+                irpfRate,
+                irpfValue,
+                irpfDeduction,
+                netSalary,
+                totalDeductions
+            };
+        }
+        
+        // Evento para o botão de calcular
+        document.getElementById('calculate-new-tab').addEventListener('click', function() {
+            const calculationResults = performCalculation();
+            
+            if (isNaN(calculationResults.salary) || calculationResults.salary <= 0) {
+                return; // Já exibiu alerta de erro
+            }
+            
+            // Criar URL com parâmetros para a página de resultados
+            const params = new URLSearchParams();
+            params.append('salaryHours', '30');
+            params.append('salaryDisplay', formatCurrency(calculationResults.salary));
+            params.append('dsrReflexoHours', calculationResults.dsrReflexoHours.toFixed(2).replace('.', ','));
+            params.append('dsrReflexo', formatCurrency(calculationResults.dsrReflexoValue));
+            params.append('extraHours50', calculationResults.extraHours50);
+            params.append('saturdayExtra', formatCurrency(calculationResults.saturdayExtraValue));
+            params.append('extraHours100', calculationResults.extraHours100);
+            params.append('sundayExtra', formatCurrency(calculationResults.sundayExtraValue));
+            params.append('productionValue', formatCurrency(calculationResults.production));
+            params.append('inssRate', (calculationResults.inssRate * 100).toFixed(2) + '%');
+            params.append('inssValue', formatCurrency(calculationResults.inssValue));
+            params.append('irpfRate', (calculationResults.irpfRate * 100).toFixed(2) + '%');
+            params.append('irpfValue', formatCurrency(Math.max(0, calculationResults.irpfValue)));
+            params.append('grossSalary', formatCurrency(calculationResults.grossSalary));
+            params.append('totalDeductions', formatCurrency(calculationResults.totalDeductions));
+            params.append('netSalary', formatCurrency(calculationResults.netSalary));
+            
+            // Abrir a página de resultados em uma nova aba
+            // Usar o caminho completo para garantir que o arquivo seja encontrado
+            const currentPath = window.location.pathname;
+            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+            window.open(window.location.protocol + '//' + window.location.host + basePath + 'resultado.html?' + params.toString(), '_blank');
+            
+            // Se estiver abrindo diretamente do sistema de arquivos (protocolo file://)
+            if (window.location.protocol === 'file:') {
+                window.open('resultado.html?' + params.toString(), '_blank');
+            }
+        });
+        
+        // Função para formatar o valor como moeda brasileira
+        function formatCurrency(value) {
+            // Truncar para duas casas decimais sem arredondar
+            const truncated = Math.floor(value * 100) / 100;
+            // Garantir que o sinal de + não apareça nos valores positivos
+            return 'R$ ' + Math.abs(truncated).toFixed(2).replace('.', ',').replace(/^\+/, '');
+        }
+    </script>
+    <script>
+        // Registrar o Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js')
+                .then(function(registration) {
+                    console.log('Service Worker registrado com sucesso:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Falha ao registrar o Service Worker:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

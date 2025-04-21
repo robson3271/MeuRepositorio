@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4361ee">
+    <title>Resultado - Calculadora de Valor/Hora</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/RPJJDigital.png">
+    <link rel="icon" type="image/png" href="icons/RPJJDigital.png">
+    <link rel="shortcut icon" href="icons/RPJJDigital.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6e6;
+        }
+        
+        .container {
+            max-width: 750px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: rgba(26, 32, 44, 0.95);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 35px;
+            color: #e6e6e6;
+            font-weight: 600;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            border-radius: 2px;
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result-table th {
+            background: linear-gradient(135deg, #4361ee, #7209b7);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            padding: 14px 10px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        .result-table th:first-child {
+            border-top-left-radius: 10px;
+        }
+        
+        .result-table th:last-child {
+            border-top-right-radius: 10px;
+        }
+        
+        .result-table td {
+            border: 1px solid #2d3748;
+            border-top: none;
+            border-left: none;
+            padding: 12px 15px;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+            color: #e6e6e6;
+        }
+        
+        .result-table tr:hover td {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .result-table td:last-child {
+            border-right: none;
+        }
+        
+        .result-table .value-cell {
+            text-align: center;
+            font-weight: 500;
+            color: #a0aec0;
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .result-table .amount-cell {
+            text-align: right;
+            font-weight: 600;
+            color: #e6e6e6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-table .amount-cell::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, rgba(67, 97, 238, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .result-table tr:hover .amount-cell::before {
+            transform: translateX(0);
+        }
+        
+        .result-table .label-cell {
+            font-weight: 500;
+            color: #e6e6e6;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .result-table .label-cell::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #4361ee;
+            opacity: 0.7;
+        }
+        
+        .total-row td {
+            background-color: #2d3748;
+            font-weight: 600;
+            border-top: 2px solid #4361ee;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .total-row .label-cell {
+            color: #a0aec0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        
+        .total-row .amount-cell {
+            color: #e6e6e6;
+            font-size: 16px;
+        }
+        
+        .liquid-row td {
+            background: linear-gradient(to right, #2d3748, #1a202c);
+            font-weight: 700;
+            color: #4361ee;
+            font-size: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            border-bottom: none;
+        }
+        
+        .liquid-row .label-cell {
+            color: #4361ee;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        
+        .liquid-row .amount-cell {
+            color: #4361ee;
+            font-size: 18px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #3a56d4, #6308a1);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.4);
+        }
+        
+        .print-btn {
+            background: linear-gradient(to right, #0f9d58, #0b8043);
+        }
+        
+        .print-btn:hover {
+            background: linear-gradient(to right, #0d8a4c, #0a703a);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 10px;
+                max-width: 100%;
+                background: white;
+            }
+            
+            .actions {
+                display: none;
+            }
+            
+            h1 {
+                color: #333;
+            }
+            
+            .result-table td, .result-table .label-cell {
+                color: #333;
+            }
+            
+            .result-table .value-cell {
+                color: #555;
+            }
+            
+            .total-row td {
+                background-color: #f0f0f0;
+            }
+            
+            .liquid-row td {
+                background: #e6e6e6;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resultado do Cálculo</h1>
+        
+        <table class="result-table" id="result-table">
+            <tr>
+                <th colspan="3">Remunerações</th>
+                <th colspan="3">Descontos</th>
+            </tr>
+            <tr>
+                <td class="label-cell">Salário Mensal</td>
+                <td class="value-cell" id="salary-hours">0</td>
+                <td class="amount-cell" id="salary-display">R$0,00</td>
+                <td class="label-cell">INSS</td>
+                <td class="value-cell" id="inss-rate">0%</td>
+                <td class="amount-cell" id="inss-value">R$ 0,00</td>
+            </tr>
+            <tr>
+                <td class="label-cell">D.S.R Reflexo</td>
+                <td class="value-cell" id="dsr-reflexo-hours">0</td>
+                <td class="amount-cell" id="dsr-reflexo">R$ 0,00</td>
+                <td class="label-cell">IRPF</td>
+                <td class="value-cell" id="irpf-rate">0%</td>
+                <td class="amount-cell" id="irpf-value">R$ 0,00</td>
+            </tr>
+            <tr>
+                <td class="label-cell">Hora Extra 50%</td>
+                <td class="value-cell" id="extra-hours-50">0</td>
+                <td class="amount-cell" id="saturday-extra">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label-cell">Hora Extra 100%</td>
+                <td class="value-cell" id="extra-hours-100">0</td>
+                <td class="amount-cell" id="sunday-extra">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label-cell">Produção</td>
+                <td class="value-cell">-</td>
+                <td class="amount-cell" id="production-value">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="total-row">
+                <td colspan="2" class="label-cell">TOTAL BRUTO:</td>
+                <td class="amount-cell" id="gross-salary">R$0,00</td>
+                <td colspan="2" class="label-cell">TOTAL DESCONTOS:</td>
+                <td class="amount-cell" id="total-deductions">R$0,00</td>
+            </tr>
+            <tr class="liquid-row">
+                <td colspan="3"></td>
+                <td colspan="2" class="label-cell">LÍQUIDO A RECEBER:</td>
+                <td class="amount-cell" id="net-salary">R$0,00</td>
+            </tr>
+        </table>
+        
+        <div class="actions">
+            <button id="back-btn" onclick="window.location.href='index.html'">Voltar para Calculadora</button>
+            <button id="print-btn" class="print-btn" onclick="window.print()">Imprimir Resultado</button>
+        </div>
+    </div>
+
+    <script>
+        // Função para obter parâmetros da URL
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split('&');
+            
+            for (const pair of pairs) {
+                const [key, value] = pair.split('=');
+                if (key && value) {
+                    params[decodeURIComponent(key)] = decodeURIComponent(value);
+                }
+            }
+            
+            return params;
+        }
+        
+        // Função para formatar o valor como moeda brasileira
+        function formatCurrency(value) {
+            // Truncar para duas casas decimais sem arredondar
+            const truncated = Math.floor(value * 100) / 100;
+            // Garantir que o sinal de + não apareça nos valores positivos
+            return 'R$ ' + Math.abs(truncated).toFixed(2).replace('.', ',').replace(/^\+/, '');
+        }
+        
+        // Carregar os dados da URL
+        window.addEventListener('DOMContentLoaded', function() {
+            const params = getUrlParams();
+            
+            // Verificar se há dados na URL
+            if (Object.keys(params).length === 0) {
+                alert('Nenhum dado de cálculo encontrado. Retornando para a calculadora.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Preencher a tabela com os dados
+            document.getElementById('salary-hours').textContent = params.salaryHours || '0';
+            
+            // Aplicar formatCurrency para todos os valores monetários
+            // Valores de remuneração
+            const salaryValue = params.salaryDisplay ? params.salaryDisplay.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('salary-display').textContent = formatCurrency(parseFloat(salaryValue));
+            
+            const dsrValue = params.dsrReflexo ? params.dsrReflexo.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('dsr-reflexo-hours').textContent = params.dsrReflexoHours || '0';
+            document.getElementById('dsr-reflexo').textContent = formatCurrency(parseFloat(dsrValue));
+            
+            const saturdayValue = params.saturdayExtra ? params.saturdayExtra.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('extra-hours-50').textContent = params.extraHours50 || '0';
+            document.getElementById('saturday-extra').textContent = formatCurrency(parseFloat(saturdayValue));
+            
+            const sundayValue = params.sundayExtra ? params.sundayExtra.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('extra-hours-100').textContent = params.extraHours100 || '0';
+            document.getElementById('sunday-extra').textContent = formatCurrency(parseFloat(sundayValue));
+            
+            const productionValue = params.productionValue ? params.productionValue.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('production-value').textContent = formatCurrency(parseFloat(productionValue));
+            
+            // Valores de descontos
+            document.getElementById('inss-rate').textContent = params.inssRate || '0%';
+            const inssValue = params.inssValue ? params.inssValue.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('inss-value').textContent = formatCurrency(parseFloat(inssValue));
+            
+            document.getElementById('irpf-rate').textContent = params.irpfRate || '0%';
+            const irpfValue = params.irpfValue ? params.irpfValue.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('irpf-value').textContent = formatCurrency(parseFloat(irpfValue));
+            
+            // Totais
+            const grossValue = params.grossSalary ? params.grossSalary.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('gross-salary').textContent = formatCurrency(parseFloat(grossValue));
+            
+            const deductionsValue = params.totalDeductions ? params.totalDeductions.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('total-deductions').textContent = formatCurrency(parseFloat(deductionsValue));
+            
+            const netValue = params.netSalary ? params.netSalary.replace('R$', '').replace(',', '.').trim() : '0';
+            document.getElementById('net-salary').textContent = formatCurrency(parseFloat(netValue));
+        });
+    </script>
+
+    <!-- Registro do Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                    console.log('Service Worker registrado com sucesso:', registration.scope);
+                }).catch(function(error) {
+                    console.log('Falha ao registrar o Service Worker:', error);
+                });
+            });
+        }
+        
+        // Adiciona link para o ícone do PWA
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'apple-touch-icon';
+        linkElement.href = 'icons/RPJJDigital.png';
+        document.head.appendChild(linkElement);
+
+        // Lógica para exibir o botão de instalação
+        let deferredPrompt;
+        const installButton = document.createElement('button');
+        installButton.style.display = 'none';
+        installButton.textContent = 'Instalar Aplicativo';
+        installButton.classList.add('print-btn');
+        installButton.style.marginTop = '15px';
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previne o comportamento padrão
+            e.preventDefault();
+            // Armazena o evento para uso posterior
+            deferredPrompt = e;
+            // Mostra o botão de instalação
+            installButton.style.display = 'block';
+            
+            // Adiciona o botão à div de ações
+            document.querySelector('.actions').appendChild(installButton);
+        });
+        
+        installButton.addEventListener('click', (e) => {
+            // Esconde o botão de instalação
+            installButton.style.display = 'none';
+            // Mostra o prompt de instalação
+            deferredPrompt.prompt();
+            // Espera o usuário responder ao prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação');
+                } else {
+                    console.log('Usuário recusou a instalação');
+                }
+                deferredPrompt = null;
+            });
+        });
+    </script>
+</body>
+</html>

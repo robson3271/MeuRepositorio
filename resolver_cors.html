@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolver Erro CORS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6e6;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: rgba(26, 32, 44, 0.95);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #e6e6e6;
+            font-weight: 600;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            color: #4361ee;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        p, ul {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .note {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid #4361ee;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background-color: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Como Resolver o Erro CORS</h1>
+        
+        <div class="warning">
+            <strong>Erro:</strong> Access to internal resource at 'file:///C:/RPJDigitalSites/SALARIO/manifest.json' from origin 'null' has been blocked by CORS policy
+        </div>
+        
+        <h2>Por que isso acontece?</h2>
+        <p>Este erro ocorre porque você está acessando os arquivos diretamente pelo sistema de arquivos (protocolo <code>file://</code>) em vez de usar um servidor web (protocolo <code>http://</code>).</p>
+        <p>Os navegadores modernos bloqueiam o acesso a recursos como o <code>manifest.json</code> quando abertos diretamente do sistema de arquivos por questões de segurança.</p>
+        
+        <h2>Como resolver</h2>
+        <p>Para resolver este problema, você precisa servir seus arquivos através de um servidor HTTP:</p>
+        
+        <h2>Solução 1: Usar o servidor Node.js incluído</h2>
+        <ol>
+            <li>Abra o Prompt de Comando (CMD) ou PowerShell</li>
+            <li>Navegue até a pasta do seu projeto:
+                <div class="code-block">cd C:\RPJDigitalSites\SALARIO</div>
+            </li>
+            <li>Execute o servidor Node.js:
+                <div class="code-block">node server.js</div>
+            </li>
+            <li>Acesse seu aplicativo no navegador através de:
+                <div class="code-block">http://localhost:8080</div>
+            </li>
+        </ol>
+        
+        <h2>Solução 2: Usar extensões de navegador</h2>
+        <p>Para desenvolvimento rápido, você pode usar extensões que desativam temporariamente as restrições de CORS:</p>
+        
+        <ul>
+            <li>Para Chrome: <a href="https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino" target="_blank" style="color: #4361ee;">CORS Unblock</a></li>
+            <li>Para Firefox: <a href="https://addons.mozilla.org/pt-BR/firefox/addon/cors-everywhere/" target="_blank" style="color: #4361ee;">CORS Everywhere</a></li>
+        </ul>
+        
+        <div class="note">
+            <strong>Importante:</strong> Para que seu PWA funcione corretamente em produção, você deve hospedá-lo em um servidor web real (como GitHub Pages, Netlify, Vercel ou qualquer hospedagem web).
+        </div>
+        
+        <h2>Solução 3: Hospedagem web</h2>
+        <p>Para uma solução permanente, hospede seu PWA em um serviço gratuito como:</p>
+        <ul>
+            <li>GitHub Pages</li>
+            <li>Netlify</li>
+            <li>Vercel</li>
+            <li>Firebase Hosting</li>
+        </ul>
+    </div>
+</body>
+</html>

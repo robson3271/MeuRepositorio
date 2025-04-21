@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Resolver o Erro CORS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6e6;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: rgba(26, 32, 44, 0.95);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #e6e6e6;
+            font-weight: 600;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            color: #4361ee;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        p, ul {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .note {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid #4361ee;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background-color: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        a {
+            color: #4361ee;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: #7209b7;
+            text-decoration: underline;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(to right, #4361ee, #7209b7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            background: linear-gradient(to right, #3a56d4, #6308a1);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Como Resolver o Erro CORS</h1>
+        
+        <p>Você está enfrentando um erro de política CORS (Cross-Origin Resource Sharing) ao tentar acessar o arquivo <code>manifest.json</code> do seu Progressive Web App (PWA).</p>
+        
+        <div class="warning">
+            <strong>Erro:</strong> Access to internal resource at 'file:///C:/RPJDigitalSites/SALARIO/manifest.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome-extension, chrome-untrusted, data, edge, http, https, isolated-app.
+        </div>
+        
+        <h2>Por que isso acontece?</h2>
+        <p>Este erro ocorre porque você está tentando acessar o arquivo <code>manifest.json</code> usando o protocolo <code>file://</code> (abrindo o arquivo HTML diretamente no navegador), mas os navegadores modernos bloqueiam esse tipo de acesso por questões de segurança.</p>
+        
+        <h2>Como resolver</h2>
+        <p>Para resolver este problema, você precisa servir seus arquivos através de um servidor HTTP. Existem várias maneiras de fazer isso:</p>
+        
+        <h2>Opção 1: Usar o Node.js</h2>
+        <p>Se você tem o Node.js instalado, pode usar o servidor que criamos:</p>
+        
+        <ol>
+            <li>Abra o Prompt de Comando (CMD) ou PowerShell</li>
+            <li>Navegue até a pasta do seu projeto:
+                <div class="code-block">cd C:\RPJDigitalSites\SALARIO</div>
+            </li>
+            <li>Execute o servidor Node.js:
+                <div class="code-block">node server.js</div>
+            </li>
+            <li>Acesse seu aplicativo no navegador através de:
+                <div class="code-block">http://localhost:8080</div>
+            </li>
+        </ol>
+        
+        <h2>Opção 2: Usar o http-server</h2>
+        <p>Uma alternativa simples é usar o pacote http-server:</p>
+        
+        <ol>
+            <li>Instale o http-server globalmente (se ainda não tiver):
+                <div class="code-block">npm install -g http-server</div>
+            </li>
+            <li>Navegue até a pasta do seu projeto:
+                <div class="code-block">cd C:\RPJDigitalSites\SALARIO</div>
+            </li>
+            <li>Inicie o servidor:
+                <div class="code-block">http-server . --cors</div>
+            </li>
+            <li>Acesse seu aplicativo no navegador através de:
+                <div class="code-block">http://localhost:8080</div>
+            </li>
+        </ol>
+        
+        <h2>Opção 3: Usar extensões de navegador</h2>
+        <p>Para desenvolvimento, você pode usar extensões que desativam temporariamente as restrições de CORS:</p>
+        
+        <ul>
+            <li>Para Chrome: <a href="https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino" target="_blank">CORS Unblock</a></li>
+            <li>Para Firefox: <a href="https://addons.mozilla.org/pt-BR/firefox/addon/cors-everywhere/" target="_blank">CORS Everywhere</a></li>
+        </ul>
+        
+        <div class="note">
+            <strong>Nota:</strong> Usar extensões para desativar CORS é recomendado apenas para desenvolvimento local, não para produção.
+        </div>
+        
+        <h2>Opção 4: Usar serviços de hospedagem</h2>
+        <p>Para uma solução permanente, hospede seu PWA em um serviço de hospedagem web como:</p>
+        
+        <ul>
+            <li>GitHub Pages (gratuito)</li>
+            <li>Netlify (gratuito)</li>
+            <li>Vercel (gratuito)</li>
+            <li>Firebase Hosting (gratuito)</li>
+        </ul>
+        
+        <h2>Verificação do manifest.json</h2>
+        <p>Seu arquivo <code>manifest.json</code> parece estar correto. Certifique-se de que todos os caminhos de ícones estão corretos e que os arquivos existem nas localizações especificadas.</p>
+        
+        <div class="note">
+            <strong>Lembre-se:</strong> PWAs só funcionam completamente quando servidos através de HTTPS ou HTTP local (localhost).
+        </div>
+    </div>
+</body>
+</html>
