@@ -1,0 +1,37 @@
+# Arquivos e pastas do sistema
+.DS_Store
+Thumbs.db
+
+# Dependências e módulos
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos de build e distribuição
+/dist
+/build
+
+# Logs
+logs
+*.log
+
+# Arquivos temporários
+.tmp
+.temp
+
+# Arquivos de IDE e editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Arquivos de cache
+.cache/
+.parcel-cache/
