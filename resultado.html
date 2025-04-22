@@ -101,10 +101,14 @@
             
             /* Container para a tabela com rolagem horizontal */
             .container {
-                overflow-x: auto; /* Adiciona rolagem horizontal apenas quando necessário */
-                -webkit-overflow-scrolling: touch; /* Melhora a rolagem em dispositivos iOS */
                 max-width: 100%;
                 padding: 25px 15px; /* Reduz o padding lateral para maximizar o espaço */
+            }
+            
+            .table-responsive {
+                overflow-x: scroll; /* Força a rolagem horizontal em todos os casos */
+                -webkit-overflow-scrolling: touch; /* Melhora a rolagem em dispositivos iOS */
+                width: 100%;
             }
         }
         
@@ -453,16 +457,27 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin-bottom: 25px;
+            display: block; /* Garante que o elemento seja um bloco para rolagem adequada */
         }
         
-        /* Removendo media query duplicada */
+        /* Garantindo que a tabela sempre tenha rolagem horizontal quando necessário */
+        @media screen and (max-width: 1024px) {
+            .table-responsive {
+                overflow-x: scroll; /* Força a rolagem horizontal em todos os casos */
+            }
+            
+            .result-table {
+                min-width: 600px; /* Garante largura mínima da tabela */
+                width: auto; /* Permite que a tabela cresça conforme necessário */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Resultado do Cálculo</h1>
         
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; display: block;">
         <table class="result-table" id="result-table">
             <tr>
                 <th colspan="3">Remunerações</th>
@@ -541,6 +556,10 @@
         
         // Função para formatar o valor como moeda brasileira
         function formatCurrency(value) {
+            // Verificar se o valor é um número válido
+            if (isNaN(value)) {
+                value = 0;
+            }
             // Truncar para duas casas decimais sem arredondar
             const truncated = Math.floor(value * 100) / 100;
             // Garantir que o sinal de + não apareça nos valores positivos
@@ -571,11 +590,13 @@
             document.getElementById('dsr-reflexo').textContent = formatCurrency(parseFloat(dsrValue));
             
             const saturdayValue = params.saturdayExtra ? params.saturdayExtra.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('extra-hours-50').textContent = params.extraHours50 || '0';
+            // Garantir que valores com vírgula sejam exibidos corretamente
+            document.getElementById('extra-hours-50').textContent = params.extraHours50 ? params.extraHours50.replace('.', ',') : '0';
             document.getElementById('saturday-extra').textContent = formatCurrency(parseFloat(saturdayValue));
             
             const sundayValue = params.sundayExtra ? params.sundayExtra.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('extra-hours-100').textContent = params.extraHours100 || '0';
+            // Garantir que valores com vírgula sejam exibidos corretamente
+            document.getElementById('extra-hours-100').textContent = params.extraHours100 ? params.extraHours100.replace('.', ',') : '0';
             document.getElementById('sunday-extra').textContent = formatCurrency(parseFloat(sundayValue));
             
             const productionValue = params.productionValue ? params.productionValue.replace('R$', '').replace(',', '.').trim() : '0';
