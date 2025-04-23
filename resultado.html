@@ -19,22 +19,67 @@
             font-family: 'Poppins', sans-serif;
         }
         
+        html {
+            height: 100%;
+            overflow-y: auto;
+        }
+        
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 15px;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: #e6e6e6;
             width: 100%;
             overflow-x: hidden;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(67, 97, 238, 0.6) rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Estilização da barra de rolagem com animações */
+        body::-webkit-scrollbar {
+            width: 10px; /* Aumentei ligeiramente para melhor visibilidade */
+        }
+        
+        body::-webkit-scrollbar-thumb {
+            background-color: rgba(67, 97, 238, 0.6);
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0.7;
+        }
+        
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(67, 97, 238, 1); /* Cor mais viva ao passar o mouse */
+            transform: scaleY(1.1); /* Aumenta ligeiramente a altura */
+            opacity: 1;
+        }
+        
+        body::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        
+        body::-webkit-scrollbar-track:hover {
+            background-color: rgba(0, 0, 0, 0.2); /* Trilho mais visível ao interagir */
+        }
+        
+        /* Animação de pulsação ao carregar a página */
+        @keyframes scrollbarPulse {
+            0% { background-color: rgba(67, 97, 238, 0.6); opacity: 0.7; }
+            50% { background-color: rgba(67, 97, 238, 1); opacity: 1; }
+            100% { background-color: rgba(67, 97, 238, 0.6); opacity: 0.7; }
+        }
+        
+        /* Aplica a animação apenas quando a página carrega */
+        body:not(:hover)::-webkit-scrollbar-thumb {
+            animation: scrollbarPulse 2s ease-in-out 2; /* 2 ciclos de 2 segundos */
         }
         
         .container {
             width: 100%;
             max-width: 900px;
-            margin: 0 auto;
+            margin: 20px auto;
             background-color: rgba(26, 32, 44, 0.95);
             padding: 20px;
             border-radius: 12px;
@@ -272,6 +317,7 @@
             
             .container {
                 padding: 15px;
+                margin: 15px auto;
             }
             
             h1 {
@@ -308,6 +354,7 @@
             .container {
                 padding: 12px;
                 border-radius: 10px;
+                margin: 10px auto;
             }
             
             h1 {
@@ -344,6 +391,7 @@
         @media (max-width: 360px) {
             .container {
                 padding: 10px;
+                margin: 8px auto;
             }
             
             h1 {
@@ -374,6 +422,7 @@
                 padding: 10px;
                 max-width: 100%;
                 background: white;
+                margin: 0;
             }
             
             .actions {
@@ -398,6 +447,10 @@
             
             .liquid-row td {
                 background: #e6e6e6;
+            }
+            
+            body::-webkit-scrollbar {
+                display: none; /* Oculta a barra de rolagem ao imprimir */
             }
         }
     </style>
@@ -463,6 +516,19 @@
         <div class="actions">
             <button id="back-btn" onclick="window.location.href='index.html'">Voltar para Calculadora</button>
             <button id="print-btn" class="print-btn" onclick="window.print()">Imprimir Resultado</button>
+        </div>
+        
+        <!-- Conteúdo extra para testar a rolagem -->
+        <div style="margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 8px;">
+            <h2 style="font-size: 18px; margin-bottom: 10px;">Informações Adicionais</h2>
+            <p style="font-size: 14px; line-height: 1.6;">
+                Este é um conteúdo adicional para demonstrar a funcionalidade da rolagem vertical. 
+                A barra de rolagem aparecerá quando o conteúdo exceder a altura da janela do navegador. 
+                Você pode adicionar mais informações aqui, como detalhes do cálculo, instruções ou notas.
+            </p>
+            <div style="height: 800px; background: rgba(255, 255, 255, 0.05); margin-top: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                <p style="font-size: 14px; color: #a0aec0;">Espaço extra para forçar a rolagem</p>
+            </div>
         </div>
     </div>
 
@@ -543,7 +609,7 @@
 
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+            window.addEvent“Culador”‘load’, function() {
                 navigator.serviceWorker.register('./sw.js').then(function(registration) {
                     console.log('Service Worker registrado com sucesso:', registration.scope);
                 }).catch(function(error) {
