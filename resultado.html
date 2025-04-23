@@ -41,7 +41,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Permite que o conteúdo com rolagem seja visível */
         }
         
         .container::before {
@@ -96,7 +96,7 @@
         @media (max-width: 768px) {
             .result-table {
                 table-layout: auto;
-                min-width: 600px; /* Largura mínima para garantir que todo o conteúdo seja visível */
+                min-width: 600px !important; /* Largura mínima para garantir que todo o conteúdo seja visível */
                 max-width: none; /* Remove a restrição de largura máxima */
             }
             
@@ -104,12 +104,15 @@
             .container {
                 max-width: 100%;
                 padding: 25px 15px; /* Reduz o padding lateral para maximizar o espaço */
+                overflow-x: visible !important; /* Garante que o conteúdo com rolagem seja visível */
             }
             
             .table-responsive {
-                overflow-x: scroll; /* Força a rolagem horizontal em todos os casos */
+                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
+                overflow-y: hidden; /* Evita rolagem vertical */
                 -webkit-overflow-scrolling: touch; /* Melhora a rolagem em dispositivos iOS */
                 width: 100%;
+                display: block !important; /* Garante que o elemento seja um bloco para rolagem adequada */
             }
         }
         
@@ -455,23 +458,41 @@
         /* Classe para garantir rolagem horizontal responsiva */
         .table-responsive {
             width: 100%;
-            overflow-x: scroll !important; /* Força a rolagem horizontal em todos os casos */
+            overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
+            overflow-y: hidden; /* Evita rolagem vertical */
             -webkit-overflow-scrolling: touch;
             margin-bottom: 25px;
             display: block; /* Garante que o elemento seja um bloco para rolagem adequada */
             max-width: 100%;
             position: relative;
+            scrollbar-width: thin; /* Para Firefox */
         }
         
-        /* Garantindo que a tabela sempre tenha rolagem horizontal quando necessário */
+        /* Estilizando a barra de rolagem para melhor visibilidade */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: rgba(67, 97, 238, 0.6);
+            border-radius: 4px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        /* Garantindo que a tabela sempre tenha rolagem horizontal */
+        .result-table {
+            min-width: 600px !important; /* Força largura mínima da tabela em todos os casos */
+            width: auto; /* Permite que a tabela cresça conforme necessário */
+        }
+        
+        /* Garantindo que a tabela sempre tenha rolagem horizontal em todas as telas */
         @media screen and (max-width: 1024px) {
             .table-responsive {
-                overflow-x: scroll !important; /* Força a rolagem horizontal em todos os casos */
-            }
-            
-            .result-table {
-                min-width: 600px; /* Garante largura mínima da tabela */
-                width: auto; /* Permite que a tabela cresça conforme necessário */
+                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
             }
         }
         
@@ -481,7 +502,7 @@
     <div class="container">
         <h1>Resultado do Cálculo</h1>
         
-        <div class="table-responsive" style="overflow-x: scroll !important; -webkit-overflow-scrolling: touch; width: 100%; display: block; max-width: 100%; position: relative;">
+        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block; max-width: 100%; position: relative;">
         <table class="result-table" id="result-table">
             <tr>
                 <th colspan="3">Remunerações</th>
