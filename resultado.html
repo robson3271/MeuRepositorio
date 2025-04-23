@@ -19,72 +19,29 @@
             font-family: 'Poppins', sans-serif;
         }
         
-        html {
-            height: 100%;
-            overflow-y: auto;
-        }
-        
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 15px;
+            padding: 25px;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #e6e6e6;
             width: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(67, 97, 238, 0.6) rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Estilização da barra de rolagem com animações */
-        body::-webkit-scrollbar {
-            width: 10px; /* Aumentei ligeiramente para melhor visibilidade */
-        }
-        
-        body::-webkit-scrollbar-thumb {
-            background-color: rgba(67, 97, 238, 0.6);
-            border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
-            opacity: 0.7;
-        }
-        
-        body::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(67, 97, 238, 1); /* Cor mais viva ao passar o mouse */
-            transform: scaleY(1.1); /* Aumenta ligeiramente a altura */
-            opacity: 1;
-        }
-        
-        body::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        
-        body::-webkit-scrollbar-track:hover {
-            background-color: rgba(0, 0, 0, 0.2); /* Trilho mais visível ao interagir */
-        }
-        
-        /* Animação de pulsação ao carregar a página */
-        @keyframes scrollbarPulse {
-            0% { background-color: rgba(67, 97, 238, 0.6); opacity: 0.7; }
-            50% { background-color: rgba(67, 97, 238, 1); opacity: 1; }
-            100% { background-color: rgba(67, 97, 238, 0.6); opacity: 0.7; }
-        }
-        
-        /* Aplica a animação apenas quando a página carrega */
-        body:not(:hover)::-webkit-scrollbar-thumb {
-            animation: scrollbarPulse 2s ease-in-out 2; /* 2 ciclos de 2 segundos */
+            max-width: 100vw;
         }
         
         .container {
+            max-width: 800px;
             width: 100%;
-            max-width: 900px;
-            margin: 20px auto;
+            margin: 0 auto;
             background-color: rgba(26, 32, 44, 0.95);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: visible; /* Permite que o conteúdo com rolagem seja visível */
         }
         
         .container::before {
@@ -93,23 +50,23 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: linear-gradient(to right, #4361ee, #7209b7);
         }
         
         .container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
         
         h1 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
             color: #e6e6e6;
             font-weight: 600;
-            font-size: 24px;
-            padding-bottom: 10px;
+            font-size: 28px;
             position: relative;
+            padding-bottom: 12px;
         }
         
         h1::after {
@@ -118,44 +75,45 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
+            width: 70px;
+            height: 4px;
             background: linear-gradient(to right, #4361ee, #7209b7);
             border-radius: 2px;
         }
         
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 20px;
-            position: relative;
-            scrollbar-width: thin;
-        }
-        
-        .table-responsive::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-thumb {
-            background-color: rgba(67, 97, 238, 0.6);
-            border-radius: 4px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
-        
         .result-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
             border-spacing: 0;
-            background-color: rgba(26, 32, 44, 0.95);
-            border-radius: 8px;
+            margin-bottom: 25px;
+            border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            min-width: 600px; /* Garante largura mínima da tabela em todos os casos */
+            /* Removido table-layout: fixed para melhor responsividade */
+        }
+        
+        @media (max-width: 768px) {
+            .result-table {
+                table-layout: auto;
+                min-width: 600px !important; /* Largura mínima para garantir que todo o conteúdo seja visível */
+                max-width: none; /* Remove a restrição de largura máxima */
+            }
+            
+            /* Container para a tabela com rolagem horizontal */
+            .container {
+                max-width: 100%;
+                padding: 25px 15px; /* Reduz o padding lateral para maximizar o espaço */
+                overflow-x: visible !important; /* Garante que o conteúdo com rolagem seja visível */
+            }
+            
+            .table-responsive {
+                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
+                overflow-y: hidden; /* Evita rolagem vertical */
+                -webkit-overflow-scrolling: touch; /* Melhora a rolagem em dispositivos iOS */
+                width: 100%;
+                display: block !important; /* Garante que o elemento seja um bloco para rolagem adequada */
+            }
         }
         
         .result-table th {
@@ -163,36 +121,36 @@
             color: white;
             font-weight: 600;
             text-align: center;
-            padding: 12px 8px;
-            font-size: 14px;
+            padding: 14px 10px;
+            font-size: 16px;
             letter-spacing: 0.5px;
-            white-space: nowrap;
+            position: relative;
         }
         
         .result-table th:first-child {
-            border-top-left-radius: 8px;
+            border-top-left-radius: 10px;
         }
         
         .result-table th:last-child {
-            border-top-right-radius: 8px;
+            border-top-right-radius: 10px;
         }
         
         .result-table td {
             border: 1px solid #2d3748;
             border-top: none;
             border-left: none;
-            padding: 10px 8px;
-            font-size: 13px;
-            color: #e6e6e6;
+            padding: 12px 15px;
+            font-size: 15px;
             transition: background-color 0.2s ease;
-        }
-        
-        .result-table td:last-child {
-            border-right: none;
+            color: #e6e6e6;
         }
         
         .result-table tr:hover td {
             background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .result-table td:last-child {
+            border-right: none;
         }
         
         .result-table .value-cell {
@@ -206,20 +164,37 @@
             text-align: right;
             font-weight: 600;
             color: #e6e6e6;
-            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-table .amount-cell::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to right, transparent, rgba(67, 97, 238, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .result-table tr:hover .amount-cell::before {
+            transform: translateX(0);
         }
         
         .result-table .label-cell {
             font-weight: 500;
             color: #e6e6e6;
-            padding-left: 12px;
+            padding-left: 15px;
             position: relative;
         }
         
         .result-table .label-cell::before {
             content: '';
             position: absolute;
-            left: 4px;
+            left: 5px;
             top: 50%;
             transform: translateY(-50%);
             width: 4px;
@@ -233,27 +208,30 @@
             background-color: #2d3748;
             font-weight: 600;
             border-top: 2px solid #4361ee;
-            padding: 12px 8px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            position: relative;
         }
         
         .total-row .label-cell {
             color: #a0aec0;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .total-row .amount-cell {
             color: #e6e6e6;
-            font-size: 14px;
+            font-size: 16px;
         }
         
         .liquid-row td {
             background: linear-gradient(to right, #2d3748, #1a202c);
             font-weight: 700;
             color: #4361ee;
-            font-size: 14px;
-            padding: 12px 8px;
+            font-size: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
             border-bottom: none;
         }
         
@@ -261,44 +239,174 @@
             color: #4361ee;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .liquid-row .amount-cell {
             color: #4361ee;
-            font-size: 15px;
+            font-size: 18px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
         }
         
         .actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-            gap: 10px;
+            margin-top: 30px;
         }
         
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: linear-gradient(to right, #4361ee, #7209b7);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
-            flex: 1;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            letter-spacing: 0.5px;
         }
         
         button:hover {
             background: linear-gradient(to right, #3a56d4, #6308a1);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.5);
-            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+            transform: translateY(-2px);
         }
         
         button:active {
             transform: translateY(1px);
-            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.4);
+        }
+        
+        /* Design Responsivo */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 25px 15px;
+                max-width: 100%;
+                overflow-x: visible; /* Permite que o conteúdo interno tenha rolagem */
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            h1 {
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+            
+            .result-table {
+                font-size: 14px;
+                width: 100%;
+                min-width: 600px; /* Garante largura mínima para mostrar todo conteúdo */
+                margin-bottom: 20px;
+            }
+            
+            .result-table th {
+                padding: 10px 8px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+            
+            .result-table td {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+            
+            .liquid-row .amount-cell {
+                font-size: 16px;
+            }
+            
+            button {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 15px 10px;
+                border-radius: 12px;
+                overflow-x: visible;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .result-table {
+                font-size: 12px;
+                margin-bottom: 15px;
+                min-width: 550px; /* Garante largura mínima para mostrar todo conteúdo */
+            }
+            
+            .result-table th {
+                padding: 8px 5px;
+                font-size: 12px;
+                letter-spacing: 0.2px;
+                white-space: nowrap;
+            }
+            
+            .result-table td {
+                padding: 6px 5px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+            
+            .total-row .amount-cell,
+            .liquid-row .amount-cell {
+                font-size: 13px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            button {
+                padding: 10px;
+                font-size: 13px;
+                width: 100%;
+            }
+        }
+        
+        /* Ajustes adicionais para telas muito pequenas */
+        @media (max-width: 360px) {
+            .container {
+                padding: 12px 8px;
+                overflow-x: visible;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            h1 {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            
+            .result-table {
+                font-size: 11px;
+                min-width: 500px; /* Garante largura mínima mesmo em telas muito pequenas */
+            }
+            
+            .result-table th,
+            .result-table td {
+                padding: 5px 4px;
+            }
+            
+            button {
+                padding: 8px;
+                font-size: 12px;
+            }
         }
         
         .print-btn {
@@ -307,108 +415,6 @@
         
         .print-btn:hover {
             background: linear-gradient(to right, #0d8a4c, #0a703a);
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 15px;
-                margin: 15px auto;
-            }
-            
-            h1 {
-                font-size: 20px;
-                margin-bottom: 20px;
-            }
-            
-            .result-table th {
-                font-size: 13px;
-                padding: 10px 6px;
-            }
-            
-            .result-table td {
-                font-size: 12px;
-                padding: 8px 6px;
-            }
-            
-            .total-row .amount-cell,
-            .liquid-row .amount-cell {
-                font-size: 13px;
-            }
-            
-            button {
-                padding: 10px;
-                font-size: 13px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 8px;
-            }
-            
-            .container {
-                padding: 12px;
-                border-radius: 10px;
-                margin: 10px auto;
-            }
-            
-            h1 {
-                font-size: 18px;
-                margin-bottom: 15px;
-            }
-            
-            .result-table th {
-                font-size: 12px;
-                padding: 8px 4px;
-            }
-            
-            .result-table td {
-                font-size: 11px;
-                padding: 6px 4px;
-            }
-            
-            .total-row .amount-cell,
-            .liquid-row .amount-cell {
-                font-size: 12px;
-            }
-            
-            .actions {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            button {
-                padding: 8px;
-                font-size: 12px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            .container {
-                padding: 10px;
-                margin: 8px auto;
-            }
-            
-            h1 {
-                font-size: 16px;
-                margin-bottom: 12px;
-            }
-            
-            .result-table th,
-            .result-table td {
-                font-size: 10px;
-                padding: 5px 3px;
-            }
-            
-            button {
-                padding: 8px;
-                font-size: 11px;
-            }
         }
         
         @media print {
@@ -422,7 +428,6 @@
                 padding: 10px;
                 max-width: 100%;
                 background: white;
-                margin: 0;
             }
             
             .actions {
@@ -448,77 +453,113 @@
             .liquid-row td {
                 background: #e6e6e6;
             }
-            
-            body::-webkit-scrollbar {
-                display: none; /* Oculta a barra de rolagem ao imprimir */
+        }
+        
+        /* Classe para garantir rolagem horizontal responsiva */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
+            overflow-y: hidden; /* Evita rolagem vertical */
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 25px;
+            display: block; /* Garante que o elemento seja um bloco para rolagem adequada */
+            max-width: 100%;
+            position: relative;
+            scrollbar-width: thin; /* Para Firefox */
+        }
+        
+        /* Estilizando a barra de rolagem para melhor visibilidade */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: rgba(67, 97, 238, 0.6);
+            border-radius: 4px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        /* Garantindo que a tabela sempre tenha rolagem horizontal */
+        .result-table {
+            min-width: 600px !important; /* Força largura mínima da tabela em todos os casos */
+            width: auto; /* Permite que a tabela cresça conforme necessário */
+        }
+        
+        /* Garantindo que a tabela sempre tenha rolagem horizontal em todas as telas */
+        @media screen and (max-width: 1024px) {
+            .table-responsive {
+                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
             }
         }
+        
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Resultado do Cálculo</h1>
         
-        <div class="table-responsive">
-            <table class="result-table" id="result-table">
-                <tr>
-                    <th colspan="3">Remunerações</th>
-                    <th colspan="3">Descontos</th>
-                </tr>
-                <tr>
-                    <td class="label-cell">Salário Mensal</td>
-                    <td class="value-cell" id="salary-hours">0</td>
-                    <td class="amount-cell" id="salary-display">R$0,00</td>
-                    <td class="label-cell">INSS</td>
-                    <td class="value-cell" id="inss-rate">0%</td>
-                    <td class="amount-cell" id="inss-value">R$ 0,00</td>
-                </tr>
-                <tr>
-                    <td class="label-cell">D.S.R Reflexo</td>
-                    <td class="value-cell" id="dsr-reflexo-hours">0</td>
-                    <td class="amount-cell" id="dsr-reflexo">R$ 0,00</td>
-                    <td class="label-cell">IRPF</td>
-                    <td class="value-cell" id="irpf-rate">0%</td>
-                    <td class="amount-cell" id="irpf-value">R$ 0,00</td>
-                </tr>
-                <tr>
-                    <td class="label-cell">Hora Extra 50%</td>
-                    <td class="value-cell" id="extra-hours-50">0</td>
-                    <td class="amount-cell" id="saturday-extra">R$0,00</td>
-                    <td colspan="3"></td>
-                </tr>
-                <tr>
-                    <td class="label-cell">Hora Extra 100%</td>
-                    <td class="value-cell" id="extra-hours-100">0</td>
-                    <td class="amount-cell" id="sunday-extra">R$0,00</td>
-                    <td colspan="3"></td>
-                </tr>
-                <tr>
-                    <td class="label-cell">Produção</td>
-                    <td class="value-cell">-</td>
-                    <td class="amount-cell" id="production-value">R$0,00</td>
-                    <td colspan="3"></td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2" class="label-cell">TOTAL BRUTO:</td>
-                    <td class="amount-cell" id="gross-salary">R$0,00</td>
-                    <td colspan="2" class="label-cell">TOTAL DESCONTOS:</td>
-                    <td class="amount-cell" id="total-deductions">R$0,00</td>
-                </tr>
-                <tr class="liquid-row">
-                    <td colspan="3"></td>
-                    <td colspan="2" class="label-cell">LÍQUIDO A RECEBER:</td>
-                    <td class="amount-cell" id="net-salary">R$0,00</td>
-                </tr>
-            </table>
+        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block; max-width: 100%; position: relative;">
+        <table class="result-table" id="result-table">
+            <tr>
+                <th colspan="3">Remunerações</th>
+                <th colspan="3">Descontos</th>
+            </tr>
+            <tr>
+                <td class="label-cell">Salário Mensal</td>
+                <td class="value-cell" id="salary-hours">0</td>
+                <td class="amount-cell" id="salary-display">R$0,00</td>
+                <td class="label-cell">INSS</td>
+                <td class="value-cell" id="inss-rate">0%</td>
+                <td class="amount-cell" id="inss-value">R$ 0,00</td>
+            </tr>
+            <tr>
+                <td class="label-cell">D.S.R Reflexo</td>
+                <td class="value-cell" id="dsr-reflexo-hours">0</td>
+                <td class="amount-cell" id="dsr-reflexo">R$ 0,00</td>
+                <td class="label-cell">IRPF</td>
+                <td class="value-cell" id="irpf-rate">0%</td>
+                <td class="amount-cell" id="irpf-value">R$ 0,00</td>
+            </tr>
+            <tr>
+                <td class="label-cell">Hora Extra 50%</td>
+                <td class="value-cell" id="extra-hours-50">0</td>
+                <td class="amount-cell" id="saturday-extra">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label-cell">Hora Extra 100%</td>
+                <td class="value-cell" id="extra-hours-100">0</td>
+                <td class="amount-cell" id="sunday-extra">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label-cell">Produção</td>
+                <td class="value-cell">-</td>
+                <td class="amount-cell" id="production-value">R$0,00</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="total-row">
+                <td colspan="2" class="label-cell">TOTAL BRUTO:</td>
+                <td class="amount-cell" id="gross-salary">R$0,00</td>
+                <td colspan="2" class="label-cell">TOTAL DESCONTOS:</td>
+                <td class="amount-cell" id="total-deductions">R$0,00</td>
+            </tr>
+            <tr class="liquid-row">
+                <td colspan="3"></td>
+                <td colspan="2" class="label-cell">LÍQUIDO A RECEBER:</td>
+                <td class="amount-cell" id="net-salary">R$0,00</td>
+            </tr>
+        </table>
         </div>
         
         <div class="actions">
             <button id="back-btn" onclick="window.location.href='index.html'">Voltar para Calculadora</button>
             <button id="print-btn" class="print-btn" onclick="window.print()">Imprimir Resultado</button>
         </div>
-        
-        
     </div>
 
     <script>
@@ -540,10 +581,13 @@
         
         // Função para formatar o valor como moeda brasileira
         function formatCurrency(value) {
+            // Verificar se o valor é um número válido
             if (isNaN(value)) {
                 value = 0;
             }
+            // Truncar para duas casas decimais sem arredondar
             const truncated = Math.floor(value * 100) / 100;
+            // Garantir que o sinal de + não apareça nos valores positivos
             return 'R$ ' + Math.abs(truncated).toFixed(2).replace('.', ',').replace(/^\+/, '');
         }
         
@@ -551,14 +595,18 @@
         window.addEventListener('DOMContentLoaded', function() {
             const params = getUrlParams();
             
+            // Verificar se há dados na URL
             if (Object.keys(params).length === 0) {
                 alert('Nenhum dado de cálculo encontrado. Retornando para a calculadora.');
                 window.location.href = 'index.html';
                 return;
             }
             
+            // Preencher a tabela com os dados
             document.getElementById('salary-hours').textContent = params.salaryHours || '0';
             
+            // Aplicar formatCurrency para todos os valores monetários
+            // Valores de remuneração
             const salaryValue = params.salaryDisplay ? params.salaryDisplay.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('salary-display').textContent = formatCurrency(parseFloat(salaryValue));
             
@@ -567,16 +615,19 @@
             document.getElementById('dsr-reflexo').textContent = formatCurrency(parseFloat(dsrValue));
             
             const saturdayValue = params.saturdayExtra ? params.saturdayExtra.replace('R$', '').replace(',', '.').trim() : '0';
+            // Garantir que valores com vírgula sejam exibidos corretamente
             document.getElementById('extra-hours-50').textContent = params.extraHours50 ? params.extraHours50.replace('.', ',') : '0';
             document.getElementById('saturday-extra').textContent = formatCurrency(parseFloat(saturdayValue));
             
             const sundayValue = params.sundayExtra ? params.sundayExtra.replace('R$', '').replace(',', '.').trim() : '0';
+            // Garantir que valores com vírgula sejam exibidos corretamente
             document.getElementById('extra-hours-100').textContent = params.extraHours100 ? params.extraHours100.replace('.', ',') : '0';
             document.getElementById('sunday-extra').textContent = formatCurrency(parseFloat(sundayValue));
             
             const productionValue = params.productionValue ? params.productionValue.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('production-value').textContent = formatCurrency(parseFloat(productionValue));
             
+            // Valores de descontos
             document.getElementById('inss-rate').textContent = params.inssRate || '0%';
             const inssValue = params.inssValue ? params.inssValue.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('inss-value').textContent = formatCurrency(parseFloat(inssValue));
@@ -585,6 +636,7 @@
             const irpfValue = params.irpfValue ? params.irpfValue.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('irpf-value').textContent = formatCurrency(parseFloat(irpfValue));
             
+            // Totais
             const grossValue = params.grossSalary ? params.grossSalary.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('gross-salary').textContent = formatCurrency(parseFloat(grossValue));
             
@@ -596,6 +648,7 @@
         });
     </script>
 
+    <!-- Registro do Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
@@ -607,28 +660,38 @@
             });
         }
         
+        // Adiciona link para o ícone do PWA
         const linkElement = document.createElement('link');
         linkElement.rel = 'apple-touch-icon';
         linkElement.href = 'icons/RPJJDigital.png';
         document.head.appendChild(linkElement);
 
+        // Lógica para exibir o botão de instalação
         let deferredPrompt;
         const installButton = document.createElement('button');
         installButton.style.display = 'none';
         installButton.textContent = 'Instalar Aplicativo';
         installButton.classList.add('print-btn');
-        installButton.style.marginTop = '10px';
+        installButton.style.marginTop = '15px';
         
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Previne o comportamento padrão
             e.preventDefault();
+            // Armazena o evento para uso posterior
             deferredPrompt = e;
+            // Mostra o botão de instalação
             installButton.style.display = 'block';
+            
+            // Adiciona o botão à div de ações
             document.querySelector('.actions').appendChild(installButton);
         });
         
         installButton.addEventListener('click', (e) => {
+            // Esconde o botão de instalação
             installButton.style.display = 'none';
+            // Mostra o prompt de instalação
             deferredPrompt.prompt();
+            // Espera o usuário responder ao prompt
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
                     console.log('Usuário aceitou a instalação');
