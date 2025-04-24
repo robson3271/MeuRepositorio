@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4361ee">
+    <meta name="theme-color" content="#6a3093">
     <title>Calculadora de Valor/Hora</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/RPJJDigital.png">
@@ -11,6 +11,7 @@
     <link rel="shortcut icon" href="icons/RPJJDigital.ico">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
         
         * {
             margin: 0;
@@ -21,12 +22,20 @@
         
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             padding: 25px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #e6e6e6;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         .container {
@@ -39,6 +48,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
+            animation: fadeIn 0.8s ease-out forwards;
             overflow: hidden;
         }
         
@@ -57,6 +67,10 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
         
+        .container * {
+            animation-duration: 0.8s;
+        }
+        
         h1 {
             text-align: center;
             margin-bottom: 35px;
@@ -65,6 +79,8 @@
             font-size: 28px;
             position: relative;
             padding-bottom: 12px;
+            animation: fadeInDown 1s ease-out forwards;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         h1::after {
@@ -82,7 +98,17 @@
         .input-group {
             margin-bottom: 22px;
             position: relative;
+            animation: fadeInUp 0.5s ease-out forwards;
+            animation-fill-mode: both;
+            opacity: 0;
         }
+        
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+        .input-group:nth-child(4) { animation-delay: 0.4s; }
+        .input-group:nth-child(5) { animation-delay: 0.5s; }
+        .input-group:nth-child(6) { animation-delay: 0.6s; }
         
         label {
             display: block;
@@ -104,15 +130,17 @@
             border-radius: 8px;
             font-size: 15px;
             transition: all 0.3s ease;
-            background-color: #1a202c;
-            color: #e6e6e6;
+            background-color: #252440;
+            color: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
         input:focus {
             border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2);
             outline: none;
             background-color: #2d3748;
+            transform: translateY(-2px);
         }
         
         input::placeholder {
@@ -123,23 +151,44 @@
             display: block;
             width: 100%;
             padding: 15px;
-            background: linear-gradient(to right, #4361ee, #7209b7);
+            background: linear-gradient(to right, #6a3093, #a044ff);
+            background-size: 200% auto;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
             letter-spacing: 0.5px;
             margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.7s;
+            opacity: 0;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         button:hover {
-            background: linear-gradient(to right, #3a56d4, #6308a1);
+            background-position: right center;
             box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
             transform: translateY(-2px);
+        }
+        
+        button:hover::before {
+            left: 100%;
         }
         
         button:active {
@@ -152,6 +201,22 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         /* O CSS da tabela de resultados foi removido, pois agora os resultados são exibidos apenas em uma nova aba */
