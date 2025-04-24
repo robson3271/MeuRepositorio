@@ -421,13 +421,13 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
-                overflow-x: hidden;
+                /* overflow-x: hidden; */ /* Removido para permitir rolagem do container */
             }
             
             .container {
                 padding: 15px 10px;
                 border-radius: 12px;
-                overflow-x: visible;
+                /* overflow-x: visible; */ /* Removido para evitar conflito com table-responsive */
                 -webkit-overflow-scrolling: touch;
             }
             
@@ -657,11 +657,11 @@
             }
             
             body {
-                overflow-x: hidden !important;
+                /* overflow-x: hidden !important; */ /* Removido para permitir rolagem do container */
             }
             
             .container {
-                overflow-x: visible !important;
+                /* overflow-x: visible !important; */ /* Removido para evitar conflito com table-responsive */
                 max-width: 100% !important;
             }
         }
