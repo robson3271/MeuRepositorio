@@ -91,7 +91,7 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-bottom: 25px;
+            margin-bottom: 0; /* Removido margin-bottom para controlar espaçamento com divs específicas */
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -290,8 +290,10 @@
         
         .actions {
             display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
+            justify-content: flex-end;
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto 0;
             animation: fadeInUp 0.8s ease-out forwards;
             animation-delay: 0.3s;
             opacity: 0;
@@ -461,8 +463,12 @@
             }
             
             .actions {
-                flex-direction: column;
-                gap: 12px;
+                max-width: 550px;
+                justify-content: center;
+            }
+            
+            .print-btn {
+                max-width: 250px;
             }
             
             button {
@@ -495,6 +501,14 @@
                 padding: 5px 4px;
             }
             
+            .actions {
+                max-width: 500px;
+            }
+            
+            .print-btn {
+                max-width: 200px;
+            }
+            
             button {
                 padding: 8px;
                 font-size: 12px;
@@ -504,6 +518,9 @@
         .print-btn {
             background: linear-gradient(to right, #3a0ca3, #4cc9f0);
             background-size: 200% auto;
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
         }
         
         .print-btn:hover {
@@ -704,63 +721,87 @@
     <div class="container">
         <h1>Resultado do Cálculo</h1>
         
+        <!-- Seção de Remunerações -->
         <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
         <table class="result-table" id="result-table">
             <tr>
                 <th colspan="3">Remunerações</th>
-                <th colspan="3">Descontos</th>
             </tr>
             <tr>
                 <td class="label-cell">Salário Mensal</td>
                 <td class="value-cell" id="salary-hours">0</td>
                 <td class="amount-cell" id="salary-display">R$0,00</td>
-                <td class="label-cell">INSS</td>
-                <td class="value-cell" id="inss-rate">0%</td>
-                <td class="amount-cell" id="inss-value">R$ 0,00</td>
             </tr>
             <tr>
                 <td class="label-cell">D.S.R Reflexos</td>
                 <td class="value-cell" id="dsr-reflexo-hours">0</td>
                 <td class="amount-cell" id="dsr-reflexo">R$ 0,00</td>
-                <td class="label-cell">IRPF</td>
-                <td class="value-cell" id="irpf-rate">0%</td>
-                <td class="amount-cell" id="irpf-value">R$ 0,00</td>
             </tr>
             <tr>
                 <td class="label-cell">Horas Extras 50%</td>
                 <td class="value-cell" id="extra-hours-50">0</td>
                 <td class="amount-cell" id="saturday-extra">R$0,00</td>
-                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="label-cell">Horas Extras 100%</td>
                 <td class="value-cell" id="extra-hours-100">0</td>
                 <td class="amount-cell" id="sunday-extra">R$0,00</td>
-                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="label-cell">Produção</td>
                 <td class="value-cell">-</td>
                 <td class="amount-cell" id="production-value">R$0,00</td>
-                <td colspan="3"></td>
             </tr>
             <tr class="total-row">
                 <td colspan="2" class="label-cell">TOTAL BRUTO:</td>
                 <td class="amount-cell" id="gross-salary">R$0,00</td>
+            </tr>
+        </table>
+        </div>
+        
+        <!-- Espaçamento entre as tabelas -->
+        <div style="height: 20px;"></div>
+        
+        <!-- Seção de Descontos -->
+        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
+        <table class="result-table" id="deductions-table">
+            <tr>
+                <th colspan="3">Descontos</th>
+            </tr>
+            <tr>
+                <td class="label-cell">INSS</td>
+                <td class="value-cell" id="inss-rate">0%</td>
+                <td class="amount-cell" id="inss-value">R$ 0,00</td>
+            </tr>
+            <tr>
+                <td class="label-cell">IRPF</td>
+                <td class="value-cell" id="irpf-rate">0%</td>
+                <td class="amount-cell" id="irpf-value">R$ 0,00</td>
+            </tr>
+            <tr class="total-row">
                 <td colspan="2" class="label-cell">TOTAL DESCONTOS:</td>
                 <td class="amount-cell" id="total-deductions">R$0,00</td>
             </tr>
+        </table>
+        </div>
+        
+        <!-- Espaçamento entre as tabelas -->
+        <div style="height: 20px;"></div>
+        
+        <!-- Seção de Líquido a Receber -->
+        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
+        <table class="result-table" id="net-table">
             <tr class="liquid-row">
-                <td colspan="3"></td>
                 <td colspan="2" class="label-cell">LÍQUIDO A RECEBER:</td>
                 <td class="amount-cell" id="net-salary">R$0,00</td>
             </tr>
         </table>
         </div>
         
-        <div class="actions">
-            <button id="back-btn" onclick="window.location.href='index.html'">Voltar para Calculadora</button>
-            <button id="print-btn" class="print-btn" onclick="window.print()">Imprimir Resultado</button>
+        <!-- Botões de ação alinhados na mesma linha -->
+        <div class="actions" style="max-width: 100%; display: flex; justify-content: center; margin-top: 30px;">
+            <button id="print-btn" class="print-btn" onclick="window.print()" style="margin-right: 20px; min-width: 180px;">Imprimir Resultado</button>
+            <button id="back-btn" style="min-width: 180px;" onclick="window.location.href='index.html'">Voltar para Calculadora</button>
         </div>
     </div>
 
