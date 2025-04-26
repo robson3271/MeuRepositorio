@@ -44,7 +44,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
-            overflow: visible !important; /* Permite que o conteúdo com rolagem seja visível */
+            overflow: visible !important; /* Permite que o conteúdo seja visível */
             animation: fadeIn 0.8s ease-out forwards;
         }
         
@@ -95,8 +95,8 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            min-width: 600px; /* Garante largura mínima da tabela em todos os casos */
-            /* Removido table-layout: fixed para melhor responsividade */
+            /* Removido min-width para permitir que a tabela se ajuste automaticamente */
+            table-layout: auto; /* Ajusta automaticamente o layout da tabela */
             animation: fadeInUp 0.8s ease-out forwards;
             animation-delay: 0.2s;
             opacity: 0;
@@ -105,7 +105,7 @@
         @media (max-width: 768px) {
             .result-table {
                 table-layout: auto;
-                min-width: 600px;
+                /* Removido min-width para permitir que a tabela se ajuste automaticamente */
             }
             
             .container {
@@ -114,9 +114,8 @@
             }
             
             .table-responsive {
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: visible;
+                overflow-y: visible;
                 width: 100%;
             }
         }
@@ -165,8 +164,8 @@
             font-weight: 500;
             color: #a0aec0;
             background-color: rgba(67, 97, 238, 0.05);
-            padding-left: 5px;
-            padding-right: 5px;
+            padding-left: 3px;
+            padding-right: 3px;
         }
         
         .result-table .amount-cell {
@@ -176,8 +175,8 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            padding-left: 5px;
-            padding-right: 5px;
+            padding-left: 3px;
+            padding-right: 3px;
         }
         
         .result-table .amount-cell:hover {
@@ -205,7 +204,7 @@
         .result-table .label-cell {
             font-weight: 500;
             color: #e6e6e6;
-            padding-left: 10px;
+            padding-left: 5px;
             position: relative;
             width: auto; /* Permite que esta coluna se ajuste ao conteúdo */
         }
@@ -395,19 +394,19 @@
             .result-table {
                 font-size: 14px;
                 width: 100%;
-                min-width: auto;/* Garante largura mínima para mostrar todo conteúdo */
                 margin-bottom: 20px;
             }
             
             .result-table th {
-                padding: 10px 8px;
-                font-size: 14px;
-                white-space: nowrap;
+                padding: 8px 5px;
+                font-size: 13px;
+                white-space: normal;
             }
             
             .result-table td {
-                padding: 10px 8px;
-                font-size: 14px;
+                padding: 8px 5px;
+                font-size: 13px;
+                white-space: normal;
             }
             
             .liquid-row .amount-cell {
@@ -429,7 +428,6 @@
             .container {
                 padding: 15px 10px;
                 border-radius: 12px;
-                -webkit-overflow-scrolling: touch;
             }
             
             h1 {
@@ -438,22 +436,22 @@
             }
             
             .result-table {
-                font-size: 12px;
+                font-size: 11px;
                 margin-bottom: 15px;
-                min-width: 600px;
+                width: 100%;
             }
             
             .result-table th {
-                padding: 6px 4px; /* Reduzido ainda mais o padding para telas pequenas */
-                font-size: 12px;
+                padding: 5px 3px; /* Reduzido ainda mais o padding para telas pequenas */
+                font-size: 11px;
                 letter-spacing: 0.2px;
-                white-space: nowrap;
+                white-space: normal;
             }
             
             .result-table td {
-                padding: 5px 4px; /* Reduzido ainda mais o padding para telas pequenas */
-                font-size: 12px;
-                white-space: nowrap;
+                padding: 5px 3px; /* Reduzido ainda mais o padding para telas pequenas */
+                font-size: 11px;
+                white-space: normal;
             }
             
             .total-row .amount-cell,
@@ -489,17 +487,17 @@
             }
             
             .result-table {
-                font-size: 10px;
+                font-size: 9px;
             }
             
             .result-table th {
-                padding: 4px 2px;
-                font-size: 10px;
+                padding: 3px 2px;
+                font-size: 9px;
             }
             
             .result-table th,
             .result-table td {
-                padding: 5px 4px;
+                padding: 3px 2px;
             }
             
             .actions {
@@ -600,33 +598,17 @@
             }
         }
         
-        /* Classe para garantir rolagem horizontal responsiva */
+        /* Classe para garantir visualização responsiva sem rolagem */
         .table-responsive {
             width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
+            overflow: visible;
             margin-bottom: 25px;
             display: block;
             max-width: 100%;
             position: relative;
-            scrollbar-width: thin; /* Para Firefox */
         }
         
-        /* Estilizando a barra de rolagem para melhor visibilidade */
-        .table-responsive::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-thumb {
-            background-color: rgba(67, 97, 238, 0.6);
-            border-radius: 4px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
+        /* Removido estilização da barra de rolagem pois não é mais necessária */
         
     </style>
 </head>
