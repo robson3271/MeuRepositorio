@@ -735,19 +735,42 @@
         // Função para obter parâmetros da URL
         function getUrlParams() {
             const params = {};
-            const queryString = window.location.search.substring(1);
-            const pairs = queryString.split('&');
-            
-            for (const pair of pairs) {
-                const [key, value] = pair.split('=');
-                if (key && value) {
-                    params[decodeURIComponent(key)] = decodeURIComponent(value);
+            try {
+                // Obter a string de consulta e verificar se não está vazia
+                const queryString = window.location.search.substring(1);
+                console.log('Query string:', queryString); // Log para depuração
+                
+                if (!queryString) {
+                    console.log('Query string vazia');
+                    return params;
                 }
-            }
-            
-            // Verificar se há o parâmetro dependents
-            if (params.dependents === '2') {
-                // Código removido - não é mais necessário aplicar estilos específicos
+                
+                // Dividir a string de consulta em pares
+                const pairs = queryString.split('&');
+                console.log('Número de parâmetros:', pairs.length); // Log para depuração
+                
+                // Processar cada par de parâmetros
+                for (const pair of pairs) {
+                    if (!pair) continue; // Ignorar pares vazios
+                    
+                    const parts = pair.split('=');
+                    const key = parts[0];
+                    const value = parts.length > 1 ? parts[1] : '';
+                    
+                    if (key) {
+                        try {
+                            params[decodeURIComponent(key)] = value ? decodeURIComponent(value) : '';
+                        } catch (e) {
+                            // Em caso de erro no decodeURIComponent, usar o valor bruto
+                            params[key] = value;
+                            console.log('Erro ao decodificar:', key, value, e);
+                        }
+                    }
+                }
+                
+                console.log('Parâmetros processados:', params); // Log para depuração
+            } catch (error) {
+                console.error('Erro ao processar parâmetros da URL:', error);
             }
             
             return params;
@@ -765,16 +788,24 @@
             return 'R$ ' + Math.abs(truncated).toFixed(2).replace('.', ',').replace(/^\+/, '');
         }
         
-        // Carregar os dados da URL
-        window.addEventListener('DOMContentLoaded', function() {
+        // Função para carregar os dados da URL
+        function loadDataFromUrl() {
             const params = getUrlParams();
+            console.log('Carregando dados da URL...');
             
             // Verificar se há dados na URL
             if (Object.keys(params).length === 0) {
+                console.error('Nenhum parâmetro encontrado na URL');
                 alert('Nenhum dado de cálculo encontrado. Retornando para a calculadora.');
-                window.location.href = 'index.html';
+                setTimeout(function() {
+                    window.location.href = 'index.html';
+                }, 500);
                 return;
             }
+            
+            console.log('Parâmetros encontrados, preenchendo dados...');
+            
+            try {
             
             // Verificar se há o parâmetro dependents e definir um atributo no HTML
             if (params.dependents) {
@@ -824,7 +855,35 @@
             
             const netValue = params.netSalary ? params.netSalary.replace('R$', '').replace(',', '.').trim() : '0';
             document.getElementById('net-salary').textContent = formatCurrency(parseFloat(netValue));
+            
+            // Esconder o elemento de carregamento após preencher os dados
+            document.querySelector('.loading').classList.add('hidden');
+            
+            } catch (error) {
+                console.error('Erro ao preencher dados:', error);
+            }
+        }
+        
+        // Garantir que a função loadDataFromUrl seja chamada quando a página estiver pronta
+        document.addEventListener('DOMContentLoaded', loadDataFromUrl);
+        
+        // Adicionar um evento de carregamento como backup para dispositivos móveis
+        window.addEventListener('load', function() {
+            // Verificar se os dados já foram carregados
+            if (document.getElementById('salary-display').textContent === 'R$0,00') {
+                console.log('Tentando carregar dados novamente no evento load...');
+                loadDataFromUrl();
+            }
         });
+        
+        // Adicionar um evento de timeout como último recurso
+        setTimeout(function() {
+            // Verificar se os dados já foram carregados
+            if (document.getElementById('salary-display').textContent === 'R$0,00') {
+                console.log('Tentando carregar dados após timeout...');
+                loadDataFromUrl();
+            }
+        }, 1000);
     </script>
 
     <!-- Registro do Service Worker -->

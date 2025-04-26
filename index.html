@@ -540,15 +540,24 @@
             params.append('netSalary', formatCurrency(calculationResults.netSalary));
             
             // Abrir a página de resultados em uma nova aba
-            // Usar o caminho completo para garantir que o arquivo seja encontrado
-            const currentPath = window.location.pathname;
-            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
-            window.open(window.location.protocol + '//' + window.location.host + basePath + 'resultado.html?' + params.toString(), '_blank');
+            // Método melhorado para funcionar em todos os ambientes (web, mobile, file://)
+            let resultUrl = '';
             
-            // Se estiver abrindo diretamente do sistema de arquivos (protocolo file://)
+            // Verificar se estamos em um ambiente web ou file://
             if (window.location.protocol === 'file:') {
-                window.open('resultado.html?' + params.toString(), '_blank');
+                // Ambiente de arquivo local
+                resultUrl = 'resultado.html?' + params.toString();
+            } else {
+                // Ambiente web (http/https)
+                const currentPath = window.location.pathname;
+                const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                resultUrl = window.location.protocol + '//' + window.location.host + basePath + 'resultado.html?' + params.toString();
             }
+            
+            // Usar setTimeout para garantir que todos os parâmetros sejam processados antes de abrir a página
+            setTimeout(function() {
+                window.open(resultUrl, '_blank');
+            }, 100);
         });
         
         // Função para formatar o valor como moeda brasileira
