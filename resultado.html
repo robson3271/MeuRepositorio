@@ -105,24 +105,19 @@
         @media (max-width: 768px) {
             .result-table {
                 table-layout: auto;
-                min-width: 600px !important; /* Largura mínima para garantir que todo o conteúdo seja visível */
-                max-width: none; /* Remove a restrição de largura máxima */
+                min-width: 600px;
             }
             
-            /* Container para a tabela com rolagem horizontal */
             .container {
                 max-width: 100%;
-                padding: 25px 15px; /* Reduz o padding lateral para maximizar o espaço */
-                overflow-x: visible !important; /* Garante que o conteúdo com rolagem seja visível */
+                padding: 25px 15px;
             }
             
             .table-responsive {
-                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
-                overflow-y: hidden; /* Evita rolagem vertical */
-                -webkit-overflow-scrolling: touch; /* Melhora a rolagem em dispositivos iOS */
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
                 width: 100%;
-                display: block !important; /* Garante que o elemento seja um bloco para rolagem adequada */
-                min-width: 0 !important; /* Garante que o elemento possa encolher */
             }
         }
         
@@ -131,7 +126,7 @@
             color: white;
             font-weight: 600;
             text-align: center;
-            padding: 14px 10px;
+            padding: 10px 8px; /* Reduzido o padding para compactar o cabeçalho */
             font-size: 16px;
             letter-spacing: 0.5px;
             position: relative;
@@ -149,7 +144,7 @@
             border: 1px solid #2d3748;
             border-top: none;
             border-left: none;
-            padding: 12px 15px;
+            padding: 8px 10px; /* Reduzido o padding para compactar as células */
             font-size: 15px;
             transition: background-color 0.2s ease;
             color: #e6e6e6;
@@ -170,6 +165,8 @@
             font-weight: 500;
             color: #a0aec0;
             background-color: rgba(67, 97, 238, 0.05);
+            padding-left: 5px;
+            padding-right: 5px;
         }
         
         .result-table .amount-cell {
@@ -179,6 +176,8 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            padding-left: 5px;
+            padding-right: 5px;
         }
         
         .result-table .amount-cell:hover {
@@ -206,8 +205,9 @@
         .result-table .label-cell {
             font-weight: 500;
             color: #e6e6e6;
-            padding-left: 15px;
+            padding-left: 10px;
             position: relative;
+            width: auto; /* Permite que esta coluna se ajuste ao conteúdo */
         }
         
         .result-table .label-cell::before {
@@ -395,7 +395,7 @@
             .result-table {
                 font-size: 14px;
                 width: 100%;
-                min-width: 600px; /* Garante largura mínima para mostrar todo conteúdo */
+                min-width: auto;/* Garante largura mínima para mostrar todo conteúdo */
                 margin-bottom: 20px;
             }
             
@@ -423,13 +423,12 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
-                /* overflow-x: hidden; */ /* Removido para permitir rolagem do container */
+                overflow-x: hidden;
             }
             
             .container {
                 padding: 15px 10px;
                 border-radius: 12px;
-                /* overflow-x: visible; */ /* Removido para evitar conflito com table-responsive */
                 -webkit-overflow-scrolling: touch;
             }
             
@@ -441,18 +440,18 @@
             .result-table {
                 font-size: 12px;
                 margin-bottom: 15px;
-                min-width: 550px; /* Garante largura mínima para mostrar todo conteúdo */
+                min-width: 600px;
             }
             
             .result-table th {
-                padding: 8px 5px;
+                padding: 6px 4px; /* Reduzido ainda mais o padding para telas pequenas */
                 font-size: 12px;
                 letter-spacing: 0.2px;
                 white-space: nowrap;
             }
             
             .result-table td {
-                padding: 6px 5px;
+                padding: 5px 4px; /* Reduzido ainda mais o padding para telas pequenas */
                 font-size: 12px;
                 white-space: nowrap;
             }
@@ -482,8 +481,6 @@
         @media (max-width: 360px) {
             .container {
                 padding: 12px 8px;
-                overflow-x: visible;
-                -webkit-overflow-scrolling: touch;
             }
             
             h1 {
@@ -492,8 +489,12 @@
             }
             
             .result-table {
-                font-size: 11px;
-                min-width: 500px; /* Garante largura mínima mesmo em telas muito pequenas */
+                font-size: 10px;
+            }
+            
+            .result-table th {
+                padding: 4px 2px;
+                font-size: 10px;
             }
             
             .result-table th,
@@ -602,45 +603,14 @@
         /* Classe para garantir rolagem horizontal responsiva */
         .table-responsive {
             width: 100%;
-            overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
-            overflow-y: hidden; /* Evita rolagem vertical */
+            overflow-x: auto;
+            overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
             margin-bottom: 25px;
-            display: block !important; /* Garante que o elemento seja um bloco para rolagem adequada */
+            display: block;
             max-width: 100%;
             position: relative;
             scrollbar-width: thin; /* Para Firefox */
-            min-width: 0; /* Garante que o elemento possa encolher */
-            transform: translateZ(0); /* Força o uso de aceleração de hardware */
-            will-change: transform; /* Otimiza para mudanças de transformação */
-            z-index: 1; /* Garante que a tabela fique acima de outros elementos */
-            animation: fadeIn 1s ease-out forwards;
-            position: relative;
-        }
-        
-        /* Indicador de deslize horizontal */
-        .table-responsive::after {
-            content: '→ Deslize →';
-            position: absolute;
-            bottom: -20px;
-            right: 10px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            animation: pulseText 2s ease-in-out infinite;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .table-responsive::after {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes pulseText {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.4; }
         }
         
         /* Estilizando a barra de rolagem para melhor visibilidade */
@@ -658,58 +628,6 @@
             border-radius: 4px;
         }
         
-        /* Garantindo que a tabela sempre tenha rolagem horizontal */
-        .result-table {
-            min-width: 600px !important; /* Força largura mínima da tabela em todos os casos */
-            width: auto; /* Permite que a tabela cresça conforme necessário */
-        }
-        
-        /* Garantindo que a tabela sempre tenha rolagem horizontal em todas as telas */
-        @media screen and (max-width: 1024px) {
-            .table-responsive {
-                overflow-x: auto !important; /* Força a rolagem horizontal em todos os casos */
-                display: block !important;
-                min-width: 0 !important;
-                width: 100% !important;
-            }
-            
-            body {
-                /* overflow-x: hidden !important; */ /* Removido para permitir rolagem do container */
-            }
-            
-            .container {
-                /* overflow-x: visible !important; */ /* Removido para evitar conflito com table-responsive */
-                max-width: 100% !important;
-            }
-        }
-        
-        /* Correção específica para o problema com dependentes = 2 */
-        html[data-dependents="2"] .table-responsive,
-        html .table-responsive {
-            overflow-x: auto !important;
-            display: block !important;
-            width: 100% !important;
-            min-width: 0 !important;
-            transform: translateZ(0) !important;
-            position: relative !important;
-            max-width: 100% !important;
-        }
-        
-        /* Correção específica para o problema com dependentes = 2 */
-        html[data-dependents="2"] .container {
-            overflow-x: visible !important;
-            max-width: 100% !important;
-            padding-left: 10px !important;
-            padding-right: 10px !important;
-        }
-        
-        /* Garantir que a tabela tenha rolagem em todos os casos */
-        html[data-dependents="2"] .result-table {
-            min-width: 600px !important;
-            width: auto !important;
-            table-layout: fixed !important;
-        }
-        
     </style>
 </head>
 <body>
@@ -722,7 +640,7 @@
         <h1>Resultado do Cálculo</h1>
         
         <!-- Seção de Remunerações -->
-        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
+        <div class="table-responsive">
         <table class="result-table" id="result-table">
             <tr>
                 <th colspan="3">Remunerações</th>
@@ -763,7 +681,7 @@
         <div style="height: 20px;"></div>
         
         <!-- Seção de Descontos -->
-        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
+        <div class="table-responsive">
         <table class="result-table" id="deductions-table">
             <tr>
                 <th colspan="3">Descontos</th>
@@ -789,7 +707,7 @@
         <div style="height: 20px;"></div>
         
         <!-- Seção de Líquido a Receber -->
-        <div class="table-responsive" style="overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0);">
+        <div class="table-responsive">
         <table class="result-table" id="net-table">
             <tr class="liquid-row">
                 <td colspan="2" class="label-cell">LÍQUIDO A RECEBER:</td>
@@ -845,15 +763,9 @@
                 }
             }
             
-            // Verificar se há o parâmetro dependents e aplicar correção específica
+            // Verificar se há o parâmetro dependents
             if (params.dependents === '2') {
-                // Aplicar correção imediata para o problema de rolagem com dependentes = 2
-                setTimeout(function() {
-                    const tableResponsive = document.querySelector('.table-responsive');
-                    if (tableResponsive) {
-                        tableResponsive.style.cssText = 'overflow-x: auto !important; overflow-y: hidden; -webkit-overflow-scrolling: touch; width: 100%; display: block !important; max-width: 100%; position: relative; min-width: 0; transform: translateZ(0); will-change: transform;';
-                    }
-                }, 0);
+                // Código removido - não é mais necessário aplicar estilos específicos
             }
             
             return params;
