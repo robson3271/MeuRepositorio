@@ -4,8 +4,8 @@
   "description": "Calculadora de valor/hora e salário líquido",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#4361ee",
+  "background_color": "#0f4c75",
+  "theme_color": "#3282b8",
   "icons": [
     {
       "src": "icons/RPJJDigital.png",
