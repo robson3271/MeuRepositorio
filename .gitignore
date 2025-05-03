@@ -1,37 +1,27 @@
-# Arquivos e pastas do sistema
-.DS_Store
-Thumbs.db
-
-# Dependências e módulos
+# Arquivos e diretórios do Node.js
 node_modules/
 npm-debug.log
 yarn-error.log
 
-# Arquivos de ambiente
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Diretório de build do Capacitor
+www/
 
-# Arquivos de build e distribuição
-/dist
-/build
+# Arquivos de build do Android
+android/app/build/
+android/.gradle/
+android/build/
+android/captures/
+android/local.properties
+android/.idea/
+android/*.iml
+android/.DS_Store
 
-# Logs
-logs
-*.log
-
-# Arquivos temporários
-.tmp
-.temp
-
-# Arquivos de IDE e editores
+# Arquivos de IDE
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# Arquivos de cache
-.cache/
-.parcel-cache/
+# Arquivos de sistema
+.DS_Store
+Thumbs.db

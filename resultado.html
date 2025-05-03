@@ -9,6 +9,8 @@
     <link rel="apple-touch-icon" href="icons/RPJJDigital.png">
     <link rel="icon" type="image/png" href="icons/RPJJDigital.png">
     <link rel="shortcut icon" href="icons/RPJJDigital.ico">
+    <link rel="stylesheet" href="android-styles.css">
+    <script type="module" src="./index.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
@@ -732,12 +734,18 @@
             });
         });
         
-        // Função para obter parâmetros da URL
+        // Função para obter parâmetros da URL com tratamento robusto para dispositivos móveis
         function getUrlParams() {
             const params = {};
             try {
                 // Obter a string de consulta e verificar se não está vazia
-                const queryString = window.location.search.substring(1);
+                let queryString = window.location.search;
+                
+                // Remover o ponto de interrogação inicial se existir
+                if (queryString.startsWith('?')) {
+                    queryString = queryString.substring(1);
+                }
+                
                 console.log('Query string:', queryString); // Log para depuração
                 
                 if (!queryString) {
@@ -759,7 +767,10 @@
                     
                     if (key) {
                         try {
-                            params[decodeURIComponent(key)] = value ? decodeURIComponent(value) : '';
+                            // Decodificar com tratamento de erro
+                            const decodedKey = decodeURIComponent(key.replace(/\+/g, ' '));
+                            const decodedValue = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+                            params[decodedKey] = decodedValue;
                         } catch (e) {
                             // Em caso de erro no decodeURIComponent, usar o valor bruto
                             params[key] = value;
@@ -776,91 +787,121 @@
             return params;
         }
         
-        // Função para formatar o valor como moeda brasileira
+        // Função para formatar o valor como moeda brasileira com tratamento robusto
         function formatCurrency(value) {
             // Verificar se o valor é um número válido
-            if (isNaN(value)) {
+            if (isNaN(value) || value === null || value === undefined) {
                 value = 0;
             }
+            
+            // Converter para número caso seja string
+            if (typeof value === 'string') {
+                value = parseFloat(value.replace(/[^0-9.,]/g, '').replace(',', '.'));
+                if (isNaN(value)) value = 0;
+            }
+            
             // Truncar para duas casas decimais sem arredondar
             const truncated = Math.floor(value * 100) / 100;
             // Garantir que o sinal de + não apareça nos valores positivos
             return 'R$ ' + Math.abs(truncated).toFixed(2).replace('.', ',').replace(/^\+/, '');
         }
         
-        // Função para carregar os dados da URL
+        // Função para carregar os dados da URL com tratamento robusto para dispositivos móveis
         function loadDataFromUrl() {
-            const params = getUrlParams();
-            console.log('Carregando dados da URL...');
-            
-            // Verificar se há dados na URL
-            if (Object.keys(params).length === 0) {
-                console.error('Nenhum parâmetro encontrado na URL');
-                alert('Nenhum dado de cálculo encontrado. Retornando para a calculadora.');
-                setTimeout(function() {
-                    window.location.href = 'index.html';
-                }, 500);
-                return;
-            }
-            
-            console.log('Parâmetros encontrados, preenchendo dados...');
-            
             try {
-            
-            // Verificar se há o parâmetro dependents e definir um atributo no HTML
-            if (params.dependents) {
-                document.documentElement.setAttribute('data-dependents', params.dependents);
-            }
-            
-            // Preencher a tabela com os dados
-            document.getElementById('salary-hours').textContent = params.salaryHours || '0';
-            
-            // Aplicar formatCurrency para todos os valores monetários
-            // Valores de remuneração
-            const salaryValue = params.salaryDisplay ? params.salaryDisplay.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('salary-display').textContent = formatCurrency(parseFloat(salaryValue));
-            
-            const dsrValue = params.dsrReflexo ? params.dsrReflexo.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('dsr-reflexo-hours').textContent = params.dsrReflexoHours || '0';
-            document.getElementById('dsr-reflexo').textContent = formatCurrency(parseFloat(dsrValue));
-            
-            const saturdayValue = params.saturdayExtra ? params.saturdayExtra.replace('R$', '').replace(',', '.').trim() : '0';
-            // Garantir que valores com vírgula sejam exibidos corretamente
-            document.getElementById('extra-hours-50').textContent = params.extraHours50 ? params.extraHours50.replace('.', ',') : '0';
-            document.getElementById('saturday-extra').textContent = formatCurrency(parseFloat(saturdayValue));
-            
-            const sundayValue = params.sundayExtra ? params.sundayExtra.replace('R$', '').replace(',', '.').trim() : '0';
-            // Garantir que valores com vírgula sejam exibidos corretamente
-            document.getElementById('extra-hours-100').textContent = params.extraHours100 ? params.extraHours100.replace('.', ',') : '0';
-            document.getElementById('sunday-extra').textContent = formatCurrency(parseFloat(sundayValue));
-            
-            const productionValue = params.productionValue ? params.productionValue.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('production-value').textContent = formatCurrency(parseFloat(productionValue));
-            
-            // Valores de descontos
-            document.getElementById('inss-rate').textContent = params.inssRate || '0%';
-            const inssValue = params.inssValue ? params.inssValue.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('inss-value').textContent = formatCurrency(parseFloat(inssValue));
-            
-            document.getElementById('irpf-rate').textContent = params.irpfRate || '0%';
-            const irpfValue = params.irpfValue ? params.irpfValue.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('irpf-value').textContent = formatCurrency(parseFloat(irpfValue));
-            
-            // Totais
-            const grossValue = params.grossSalary ? params.grossSalary.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('gross-salary').textContent = formatCurrency(parseFloat(grossValue));
-            
-            const deductionsValue = params.totalDeductions ? params.totalDeductions.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('total-deductions').textContent = formatCurrency(parseFloat(deductionsValue));
-            
-            const netValue = params.netSalary ? params.netSalary.replace('R$', '').replace(',', '.').trim() : '0';
-            document.getElementById('net-salary').textContent = formatCurrency(parseFloat(netValue));
-            
-            // Esconder o elemento de carregamento após preencher os dados
-            document.querySelector('.loading').classList.add('hidden');
-            
+                console.log('Iniciando carregamento de dados da URL...');
+                const params = getUrlParams();
+                
+                // Verificar se há dados na URL
+                if (Object.keys(params).length === 0) {
+                    console.error('Nenhum parâmetro encontrado na URL');
+                    document.querySelector('.loading').classList.add('hidden');
+                    alert('Nenhum dado de cálculo encontrado. Retornando para a calculadora.');
+                    setTimeout(function() {
+                        window.location.href = 'index.html';
+                    }, 500);
+                    return;
+                }
+                
+                console.log('Parâmetros encontrados, preenchendo dados...');
+                
+                // Função auxiliar para processar valores monetários
+                function processMonetaryValue(value) {
+                    if (!value) return '0';
+                    // Remover R$, espaços e substituir vírgula por ponto
+                    return value.replace(/R\$|\s/g, '').replace(',', '.').trim();
+                }
+                
+                // Função auxiliar para atualizar elementos com segurança
+                function updateElement(id, value, isMonetary = false) {
+                    try {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            if (isMonetary) {
+                                const processedValue = processMonetaryValue(value);
+                                element.textContent = formatCurrency(parseFloat(processedValue));
+                            } else {
+                                element.textContent = value || '0';
+                            }
+                        } else {
+                            console.warn(`Elemento com ID ${id} não encontrado`);
+                        }
+                    } catch (err) {
+                        console.error(`Erro ao atualizar elemento ${id}:`, err);
+                    }
+                }
+                
+                // Verificar se há o parâmetro dependents e definir um atributo no HTML
+                if (params.dependents) {
+                    document.documentElement.setAttribute('data-dependents', params.dependents);
+                }
+                
+                // Preencher a tabela com os dados - Valores de remuneração
+                updateElement('salary-hours', params.salaryHours);
+                updateElement('salary-display', params.salaryDisplay, true);
+                
+                updateElement('dsr-reflexo-hours', params.dsrReflexoHours);
+                updateElement('dsr-reflexo', params.dsrReflexo, true);
+                
+                // Garantir que valores com vírgula sejam exibidos corretamente
+                if (params.extraHours50) {
+                    updateElement('extra-hours-50', params.extraHours50.replace('.', ','));
+                } else {
+                    updateElement('extra-hours-50', '0');
+                }
+                updateElement('saturday-extra', params.saturdayExtra, true);
+                
+                if (params.extraHours100) {
+                    updateElement('extra-hours-100', params.extraHours100.replace('.', ','));
+                } else {
+                    updateElement('extra-hours-100', '0');
+                }
+                updateElement('sunday-extra', params.sundayExtra, true);
+                
+                updateElement('production-value', params.productionValue, true);
+                
+                // Valores de descontos
+                updateElement('inss-rate', params.inssRate || '0%');
+                updateElement('inss-value', params.inssValue, true);
+                
+                updateElement('irpf-rate', params.irpfRate || '0%');
+                updateElement('irpf-value', params.irpfValue, true);
+                
+                // Totais
+                updateElement('gross-salary', params.grossSalary, true);
+                updateElement('total-deductions', params.totalDeductions, true);
+                updateElement('net-salary', params.netSalary, true);
+                
+                // Esconder o elemento de carregamento após preencher os dados
+                document.querySelector('.loading').classList.add('hidden');
+                
+                console.log('Dados carregados com sucesso!');
             } catch (error) {
-                console.error('Erro ao preencher dados:', error);
+                console.error('Erro ao carregar dados:', error);
+                // Garantir que o elemento de carregamento seja escondido mesmo em caso de erro
+                document.querySelector('.loading').classList.add('hidden');
+                // Tentar novamente após um breve intervalo
+                setTimeout(loadDataFromUrl, 500);
             }
         }
         

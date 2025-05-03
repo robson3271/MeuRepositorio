@@ -1,0 +1,53 @@
+/* Estilos específicos para a versão Android */
+
+/* Aplicados quando o app está rodando como aplicativo nativo */
+.native-android {
+    /* Ajustes para evitar problemas com a barra de status do Android */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Melhorias de toque para dispositivos Android */
+.native-android button,
+.native-android input[type="number"],
+.native-android input[type="text"] {
+    /* Aumenta a área de toque para facilitar o uso em telas touch */
+    min-height: 48px;
+}
+
+/* Ajustes para telas menores em dispositivos Android */
+@media (max-width: 360px) {
+    .native-android .container {
+        padding: 15px 10px;
+    }
+    
+    .native-android input {
+        font-size: 16px; /* Evita zoom automático em campos de formulário */
+    }
+    
+    .native-android button {
+        padding: 12px 10px;
+    }
+}
+
+/* Ajustes para evitar problemas com teclado virtual */
+.native-android .container {
+    margin-bottom: 20px;
+}
+
+/* Melhorias de desempenho para renderização em dispositivos Android */
+.native-android * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Ajustes para tabelas em telas pequenas */
+.native-android .result-table {
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Ajustes para o botão de voltar */
+.native-android #back-btn {
+    margin-top: 20px;
+}
